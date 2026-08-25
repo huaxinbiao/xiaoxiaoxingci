@@ -1,5 +1,6 @@
 import { fail, json, isAdmin } from '../../lib/http.js';
 import { DEFAULT_APP_ID, getApp } from '../../lib/app.js';
+import { db } from '../../lib/db.js';
 import { parseVersion } from '../../lib/semver.js';
 
 export async function onRequestGet(context) {
@@ -7,7 +8,7 @@ export async function onRequestGet(context) {
     return fail('未授权', 401, 401);
   }
   const appId = new URL(context.request.url).searchParams.get('appId') || DEFAULT_APP_ID;
-  const app = await getApp(context.env.DB, appId);
+  const app = await getApp(db(context.env), appId);
   if (!app) return fail('未登记的应用', 404, 404);
   return json(app);
 }
@@ -34,7 +35,7 @@ export async function onRequestPut(context) {
     return fail('disabledVersions 必须是 x.y.z 列表');
   }
 
-  const current = await getApp(context.env.DB, appId);
+  const current = await getApp(db(context.env), appId);
   if (!current) return fail('未登记的应用', 404, 404);
 
   const next = {
@@ -56,7 +57,7 @@ export async function onRequestPut(context) {
     },
   };
 
-  await context.env.DB.prepare(
+  await db(context.env).prepare(
     `UPDATE apps SET
       enabled = ?, min_version = ?, latest_version = ?, disabled_versions = ?,
       android_url = ?, ios_url = ?,
@@ -83,5 +84,5 @@ export async function onRequestPut(context) {
     )
     .run();
 
-  return json(await getApp(context.env.DB, appId));
+  return json(await getApp(db(context.env), appId));
 }

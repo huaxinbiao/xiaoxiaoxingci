@@ -1,5 +1,6 @@
 import { fail, json, isAdmin } from '../../lib/http.js';
 import { DEFAULT_APP_ID } from '../../lib/app.js';
+import { db } from '../../lib/db.js';
 
 export async function onRequestGet(context) {
   if (!isAdmin(context.request, context.env)) {
@@ -24,8 +25,8 @@ export async function onRequestGet(context) {
        ORDER BY i.last_seen DESC LIMIT ?`;
 
   const result = query
-    ? await context.env.DB.prepare(sql).bind(appId, `%${query}%`, limit).all()
-    : await context.env.DB.prepare(sql).bind(appId, limit).all();
+    ? await db(context.env).prepare(sql).bind(appId, `%${query}%`, limit).all()
+    : await db(context.env).prepare(sql).bind(appId, limit).all();
 
   return json(
     (result.results || []).map((row) => ({
@@ -64,13 +65,13 @@ export async function onRequestPost(context) {
   }
 
   if (action === 'unblock') {
-    await context.env.DB.prepare('DELETE FROM blocked_installs WHERE install_id = ? AND app_id = ?')
+    await db(context.env).prepare('DELETE FROM blocked_installs WHERE install_id = ? AND app_id = ?')
       .bind(installId, appId)
       .run();
     return json({ installId, blocked: false });
   }
 
-  await context.env.DB.prepare(
+  await db(context.env).prepare(
     `INSERT INTO blocked_installs (install_id, app_id, note, created_at)
      VALUES (?, ?, ?, ?)
      ON CONFLICT(install_id) DO UPDATE SET note = excluded.note`,

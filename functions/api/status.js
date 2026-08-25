@@ -1,5 +1,6 @@
 import { fail, json } from '../lib/http.js';
 import { DEFAULT_APP_ID, getApp } from '../lib/app.js';
+import { db } from '../lib/db.js';
 import { compareVersion, parseVersion } from '../lib/semver.js';
 
 export async function onRequestGet(context) {
@@ -15,14 +16,14 @@ export async function onRequestGet(context) {
     return fail('appVersion 必须是 x.y.z');
   }
 
-  const app = await getApp(context.env.DB, appId);
+  const app = await getApp(db(context.env), appId);
   if (!app) {
     return fail('未登记的应用', 404, 404);
   }
 
   let installBlocked = false;
   if (installId) {
-    const blocked = await context.env.DB.prepare(
+    const blocked = await db(context.env).prepare(
       'SELECT install_id FROM blocked_installs WHERE install_id = ? AND app_id = ?',
     )
       .bind(installId, appId)

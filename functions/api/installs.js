@@ -1,5 +1,6 @@
 import { fail, json } from '../lib/http.js';
 import { DEFAULT_APP_ID } from '../lib/app.js';
+import { db } from '../lib/db.js';
 import { parseVersion } from '../lib/semver.js';
 
 const PLATFORMS = new Set(['android', 'ios']);
@@ -34,7 +35,7 @@ export async function onRequestPost(context) {
   }
 
   const now = new Date().toISOString();
-  await context.env.DB.prepare(
+  await db(context.env).prepare(
     `INSERT INTO installs (
         install_id, app_id, platform, app_version, device_model, app_language, first_seen, last_seen
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)

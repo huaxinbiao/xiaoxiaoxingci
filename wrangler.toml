@@ -3,9 +3,10 @@ pages_build_output_dir = "dist"
 compatibility_date = "2026-08-01"
 
 [[d1_databases]]
-binding = "DB"
+binding = "xiaoxiaoxingci"
 database_name = "xiaoxiaoxingci"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "2c180411-71e2-4ef8-bc66-fd437a73df4e"
+migrations_dir = "migrations"
 
 [vars]
 APP_ID = "nb.tbaba.com"

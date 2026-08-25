@@ -31,7 +31,7 @@ npx wrangler d1 create xiaoxiaoxingci
 npx wrangler d1 migrations apply xiaoxiaoxingci --remote
 ```
 
-5. 在 Pages 项目 Settings → Bindings 增加 D1：变量名 `DB`，数据库 `xiaoxiaoxingci`。
+5. 在 Pages 项目 Settings → Bindings 增加 D1：变量名 **`xiaoxiaoxingci`**，数据库 `xiaoxiaoxingci`（`database_id` 已写入 `wrangler.toml`）。
 6. 可选：Settings → Environment variables 增加密钥 `ADMIN_TOKEN`。设置后，打开后台页面先填同一令牌再操作。
 7. 用 [Cloudflare Access](https://developers.cloudflare.com/cloudflare-one/policies/access/) 保护站点路径 `/`。**不要**把 `/api/installs` 和 `/api/status` 纳入 Access，App 需要公开访问。
 
