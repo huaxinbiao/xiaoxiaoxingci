@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "wrangler pages dev -- vite",
+    "dev": "npm run build && wrangler dev",
     "vite": "vite",
-    "build": "vite build",
-    "preview": "npm run build && wrangler pages dev dist",
-    "deploy": "npm run build && wrangler pages deploy dist",
+    "build": "vite build && wrangler pages functions build --outdir=./dist/_worker.js",
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
     "db:migrate:local": "wrangler d1 migrations apply xiaoxiaoxingci --local",
     "db:migrate": "wrangler d1 migrations apply xiaoxiaoxingci --remote",
     "test": "node --experimental-strip-types --test src/format.test.ts"

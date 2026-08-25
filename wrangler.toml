@@ -1,6 +1,12 @@
 name = "xiaoxiaoxingci"
-pages_build_output_dir = "dist"
+main = "./dist/_worker.js"
 compatibility_date = "2026-08-01"
+workers_dev = true
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
 
 [[d1_databases]]
 binding = "xiaoxiaoxingci"

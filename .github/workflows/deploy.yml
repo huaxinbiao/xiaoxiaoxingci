@@ -1,11 +1,9 @@
-name: Deploy Cloudflare Pages
+name: Deploy Worker
 
 on:
   push:
     branches: [main, master]
-    paths:
-      - "xiaoxiaoxingci/**"
-      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -13,22 +11,18 @@ jobs:
     permissions:
       contents: read
       deployments: write
-    defaults:
-      run:
-        working-directory: xiaoxiaoxingci
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: xiaoxiaoxingci/package-lock.json
       - run: npm ci
+      - run: npm test
       - run: npm run build
-      - name: Deploy
+      - name: Deploy Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: xiaoxiaoxingci
-          command: pages deploy dist --project-name=xiaoxiaoxingci
+          command: deploy
