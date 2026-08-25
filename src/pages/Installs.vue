@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { fetchInstalls, setBlocked } from '../api';
+import { formatLocalDateTime } from '../format';
 
 const error = ref('');
 const query = ref('');
@@ -55,7 +56,8 @@ onMounted(load);
           <th>installId</th>
           <th>版本</th>
           <th>平台</th>
-          <th>机型</th>
+          <th>品牌</th>
+          <th>型号</th>
           <th>语言</th>
           <th>最近见到</th>
           <th></th>
@@ -66,9 +68,10 @@ onMounted(load);
           <td>{{ item.installId }}</td>
           <td>{{ item.appVersion }}</td>
           <td>{{ item.platform }}</td>
+          <td>{{ item.deviceBrand }}</td>
           <td>{{ item.deviceModel }}</td>
           <td>{{ item.appLanguage }}</td>
-          <td>{{ item.lastSeen?.slice(0, 19).replace('T', ' ') }}</td>
+          <td>{{ formatLocalDateTime(item.lastSeen) }}</td>
           <td>
             <button v-if="item.blocked" class="ghost" type="button" @click="toggle(item, false)">解禁</button>
             <button v-else class="danger" type="button" @click="toggle(item, true)">禁用</button>

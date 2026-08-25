@@ -46,7 +46,7 @@ export async function onRequestGet(context) {
       .bind(appId)
       .all(),
     db(context.env).prepare(
-      'SELECT device_model AS name, COUNT(*) AS n FROM installs WHERE app_id = ? GROUP BY device_model ORDER BY n DESC LIMIT 10',
+      "SELECT trim(device_brand || ' ' || device_model) AS name, COUNT(*) AS n FROM installs WHERE app_id = ? GROUP BY device_brand, device_model ORDER BY n DESC LIMIT 10",
     )
       .bind(appId)
       .all(),

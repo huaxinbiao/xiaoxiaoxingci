@@ -53,7 +53,14 @@ npm run dev
 
 ## App 接口
 
-- `POST /api/installs` 上报 `appId`、`installId`、`appVersion`、`platform`、`deviceModel`、`appLanguage`
+- `POST /api/installs` 上报 `appId`、`installId`、`appVersion`、`platform`、`deviceBrand`、`deviceModel`、`appLanguage`（品牌+型号，不是设备名称）
 - `GET /api/status?appId=&installId=&appVersion=` 返回禁用与升级策略，含 `androidUrl` / `iosUrl`
 
-Flutter 使用 `--dart-define=API_BASE_URL=https://<你的页面>.pages.dev`
+Flutter 默认使用 `https://xiaoxiaoxingci.pages.dev`。
+
+公开法律页：
+
+- `/legal/privacy.html?lang=zh_CN`
+- `/legal/agreement.html?lang=zh_CN`
+
+`lang` 可为 `zh_CN`、`zh_TW`、`en_US`。App 用 WebView 打开。

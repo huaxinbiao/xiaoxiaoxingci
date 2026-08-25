@@ -34,6 +34,7 @@ export async function onRequestGet(context) {
       appId: row.app_id,
       platform: row.platform,
       appVersion: row.app_version,
+      deviceBrand: row.device_brand || 'unknown',
       deviceModel: row.device_model,
       appLanguage: row.app_language,
       firstSeen: row.first_seen,

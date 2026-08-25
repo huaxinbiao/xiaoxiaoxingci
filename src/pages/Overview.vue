@@ -31,7 +31,7 @@ onMounted(async () => {
       <p v-if="!stats.versions?.length" class="muted">暂无</p>
     </div>
     <div class="panel">
-      <h3>语言 / 机型</h3>
+      <h3>语言 / 品牌型号</h3>
       <p v-for="item in stats.languages" :key="'l' + item.name" class="muted">{{ item.name }} · {{ item.n }}</p>
       <p v-for="item in stats.models" :key="'m' + item.name" class="muted">{{ item.name }} · {{ item.n }}</p>
     </div>

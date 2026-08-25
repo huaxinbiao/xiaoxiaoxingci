@@ -18,6 +18,7 @@ export async function onRequestPost(context) {
   const installId = String(body.installId || '').trim();
   const appVersion = String(body.appVersion || '').trim();
   const platform = String(body.platform || '').trim().toLowerCase();
+  const deviceBrand = String(body.deviceBrand || 'unknown').trim().slice(0, 40) || 'unknown';
   const deviceModel = String(body.deviceModel || 'unknown').trim().slice(0, 80) || 'unknown';
   const appLanguage = String(body.appLanguage || 'en_US').trim();
 
@@ -37,17 +38,18 @@ export async function onRequestPost(context) {
   const now = new Date().toISOString();
   await db(context.env).prepare(
     `INSERT INTO installs (
-        install_id, app_id, platform, app_version, device_model, app_language, first_seen, last_seen
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        install_id, app_id, platform, app_version, device_brand, device_model, app_language, first_seen, last_seen
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(install_id) DO UPDATE SET
         app_id = excluded.app_id,
         platform = excluded.platform,
         app_version = excluded.app_version,
+        device_brand = excluded.device_brand,
         device_model = excluded.device_model,
         app_language = excluded.app_language,
         last_seen = excluded.last_seen`,
   )
-    .bind(installId, appId, platform, appVersion, deviceModel, appLanguage, now, now)
+    .bind(installId, appId, platform, appVersion, deviceBrand, deviceModel, appLanguage, now, now)
     .run();
 
   return json({ installId, registered: true });
