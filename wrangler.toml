@@ -10,3 +10,4 @@ migrations_dir = "migrations"
 
 [vars]
 APP_ID = "nb.tbaba.com"
+ADMIN_USER = "admin_user"

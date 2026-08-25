@@ -4,7 +4,7 @@ import { db } from '../../lib/db.js';
 import { parseVersion } from '../../lib/semver.js';
 
 export async function onRequestGet(context) {
-  if (!isAdmin(context.request, context.env)) {
+  if (!(await isAdmin(context.request, context.env))) {
     return fail('未授权', 401, 401);
   }
   const appId = new URL(context.request.url).searchParams.get('appId') || DEFAULT_APP_ID;
@@ -14,7 +14,7 @@ export async function onRequestGet(context) {
 }
 
 export async function onRequestPut(context) {
-  if (!isAdmin(context.request, context.env)) {
+  if (!(await isAdmin(context.request, context.env))) {
     return fail('未授权', 401, 401);
   }
 

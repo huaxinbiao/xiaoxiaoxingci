@@ -3,7 +3,7 @@ import { DEFAULT_APP_ID } from '../../lib/app.js';
 import { db } from '../../lib/db.js';
 
 export async function onRequestGet(context) {
-  if (!isAdmin(context.request, context.env)) {
+  if (!(await isAdmin(context.request, context.env))) {
     return fail('未授权', 401, 401);
   }
 
@@ -44,7 +44,7 @@ export async function onRequestGet(context) {
 }
 
 export async function onRequestPost(context) {
-  if (!isAdmin(context.request, context.env)) {
+  if (!(await isAdmin(context.request, context.env))) {
     return fail('未授权', 401, 401);
   }
 

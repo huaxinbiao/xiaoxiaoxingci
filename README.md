@@ -32,8 +32,13 @@ npx wrangler d1 migrations apply xiaoxiaoxingci --remote
 ```
 
 5. 在 Pages 项目 Settings → Bindings 增加 D1：变量名 **`xiaoxiaoxingci`**，数据库 `xiaoxiaoxingci`（`database_id` 已写入 `wrangler.toml`）。
-6. 可选：Settings → Environment variables 增加密钥 `ADMIN_TOKEN`。设置后，打开后台页面先填同一令牌再操作。
-7. 用 [Cloudflare Access](https://developers.cloudflare.com/cloudflare-one/policies/access/) 保护站点路径 `/`。**不要**把 `/api/installs` 和 `/api/status` 纳入 Access，App 需要公开访问。
+6. 后台登录用户名固定为 `admin_user`。密码放在 Pages Secret `ADMIN_PASSWORD`，不要提交到 Git。
+
+```bash
+npx wrangler pages secret put ADMIN_PASSWORD --project-name=xiaoxiaoxingci
+```
+
+7. 用 [Cloudflare Access](https://developers.cloudflare.com/cloudflare-one/policies/access/) 保护站点路径 `/` 可选。**不要**把 `/api/installs`、`/api/status`、`/api/admin/login` 以外的公开接口误配到会挡住 App 的规则。`/api/installs` 和 `/api/status` 必须对 App 公开。
 
 GitHub Actions 部署需仓库 Secrets：`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`。
 

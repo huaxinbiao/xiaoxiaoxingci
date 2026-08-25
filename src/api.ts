@@ -1,8 +1,30 @@
 const APP_ID = 'nb.tbaba.com';
 
+export function hasAdminSession() {
+  return Boolean(localStorage.getItem('adminToken'));
+}
+
+export function clearAdminSession() {
+  localStorage.removeItem('adminToken');
+}
+
 function adminHeaders(): HeadersInit {
   const token = localStorage.getItem('adminToken') || '';
-  return token ? { 'Content-Type': 'application/json', 'X-Admin-Token': token } : { 'Content-Type': 'application/json' };
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
+}
+
+export async function login(username: string, password: string) {
+  const data = await read<{ token: string; username: string }>(
+    await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    }),
+  );
+  localStorage.setItem('adminToken', data.token);
+  return data;
 }
 
 async function read<T>(response: Response): Promise<T> {
